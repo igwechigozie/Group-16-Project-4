@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grade Calculator</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f2f6f8;
+            color: #222;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 600px;
+            margin: 25px auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #00695c;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            margin-top: 18px;
+            border: none;
+            border-radius: 8px;
+            background: #00695c;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:active {
+            opacity: 0.8;
+        }
+
+        .record {
+            border-left: 5px solid #00695c;
+            background: #f8fafa;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+
+        .record h3 {
+            margin-top: 0;
+            color: #00695c;
+        }
+
+        .delete-btn {
+            background: #d32f2f;
+            margin-top: 10px;
+        }
+
+        #records {
+            margin-top: 10px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Student Grade Calculator</h1>
+
+    <div class="card">
+
+        <label for="studentName">Student Name</label>
+        <input type="text" id="studentName" placeholder="Enter student name">
+
+        <label for="score1">Assessment Score 1</label>
+        <input type="number" id="score1" placeholder="Enter score">
+
+        <label for="score2">Assessment Score 2</label>
+        <input type="number" id="score2" placeholder="Enter score">
+
+        <label for="score3">Assessment Score 3</label>
+        <input type="number" id="score3" placeholder="Enter score">
+
+        <button onclick="calculateGrade()">Calculate Grade</button>
+
+    </div>
+
+    <div class="card">
+        <h2>Student Records</h2>
+        <div id="records">
+            <div class="empty">No student records yet.</div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+    let records = JSON.parse(localStorage.getItem("studentRecords_group16")) || [];
+
+    function calculateGrade() {
+
+        const name = document.getElementById("studentName").value.trim();
+
+        const score1 = Number(document.getElementById("score1").value);
+        const score2 = Number(document.getElementById("score2").value);
+        const score3 = Number(document.getElementById("score3").value);
+
+        if (name === "") {
+            alert("Please enter the student's name.");
+            return;
+        }
+
+        if (
+            document.getElementById("score1").value === "" ||
+            document.getElementById("score2").value === "" ||
+            document.getElementById("score3").value === ""
+        ) {
+            alert("Please enter all three assessment scores.");
+            return;
+        }
+
+        if (
+            score1 < 0 || score1 > 100 ||
+            score2 < 0 || score2 > 100 ||
+            score3 < 0 || score3 > 100
+        ) {
+            alert("Scores must be between 0 and 100.");
+            return;
+        }
+
+        const total = score1 + score2 + score3;
+        const average = total / 3;
+
+        let grade;
+
+        if (average >= 70) {
+            grade = "A";
+        } else if (average >= 60) {
+            grade = "B";
+        } else if (average >= 50) {
+            grade = "C";
+        } else if (average >= 45) {
+            grade = "D";
+        } else if (average >= 40) {
+            grade = "E";
+        } else {
+            grade = "F";
+        }
+
+        const status = average >= 40 ? "PASS" : "FAIL";
+
+        const student = {
+            id: Date.now(),
+            name: name,
+            score1: score1,
+            score2: score2,
+            score3: score3,
+            total: total,
+            average: average.toFixed(2),
+            grade: grade,
+            status: status
+        };
+
+        records.push(student);
+
+        localStorage.setItem("studentRecords_group16", JSON.stringify(records));
+
+        displayRecords();
+
+        document.getElementById("studentName").value = "";
+        document.getElementById("score1").value = "";
+        document.getElementById("score2").value = "";
+        document.getElementById("score3").value = "";
+    }
+
+    function displayRecords() {
+
+        const recordsDiv = document.getElementById("records");
+
+        if (records.length === 0) {
+            recordsDiv.innerHTML =
+                '<div class="empty">No student records yet.</div>';
+            return;
+        }
+
+        recordsDiv.innerHTML = "";
+
+        records.forEach(function(student) {
+
+            const record = document.createElement("div");
+
+            record.className = "record";
+
+            record.innerHTML = `
+                <h3>${student.name}</h3>
+
+                <p><strong>Assessment 1:</strong> ${student.score1}</p>
+                <p><strong>Assessment 2:</strong> ${student.score2}</p>
+                <p><strong>Assessment 3:</strong> ${student.score3}</p>
+
+                <p><strong>Total Score:</strong> ${student.total}</p>
+
+                <p><strong>Average Score:</strong> ${student.average}</p>
+
+                <p><strong>Grade:</strong> ${student.grade}</p>
+
+                <p><strong>Status:</strong> ${student.status}</p>
+
+                <button class="delete-btn"
+                    onclick="deleteRecord(${student.id})">
+                    Delete Record
+                </button>
+            `;
+
+            recordsDiv.appendChild(record);
+        });
+    }
+
+    function deleteRecord(id) {
+
+        records = records.filter(function(student) {
+            return student.id !== id;
+        });
+
+        localStorage.setItem("studentRecords_group16", JSON.stringify(records));
+
+        displayRecords();
+    }
+
+    displayRecords();
+
+</script>
+
+</body>
+</html>
