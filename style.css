@@ -1,0 +1,104 @@
+/* ---------- basic page setup ---------- */
+
+body {
+  margin: 0;
+  font-family: Verdana, Arial, sans-serif;
+  background-color: #eef1f8;
+  color: #2b2b2b;
+}
+
+.container {
+  width: 92%;
+  max-width: 600px;
+  margin: 25px auto;
+}
+
+h1 {
+  text-align: center;
+  color: #2e3a87;
+  margin-bottom: 20px;
+}
+
+/* ---------- the white boxes ---------- */
+
+.card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #d6dcf0;
+  margin-bottom: 20px;
+}
+
+.card h2 {
+  color: #2e3a87;
+  margin-top: 0;
+}
+
+/* ---------- form styling ---------- */
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  color: #444444;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #b9c2dd;
+  border-radius: 6px;
+  font-size: 16px;
+  box-sizing: border-box; /* keeps padding from making inputs too wide */
+}
+
+input:focus {
+  outline: none;
+  border-color: #2e3a87;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ee6c4d;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:active {
+  opacity: 0.8;
+}
+
+/* ---------- delete button is a bit different ---------- */
+
+.delete-btn {
+  background-color: #c1121f;
+  margin-top: 10px;
+}
+
+/* ---------- each saved student record ---------- */
+
+.record {
+  /* border-left: 5px solid #2e3a87; */
+  background-color: #f6f7fc;
+  padding: 15px;
+  margin-top: 15px;
+  border-radius: 6px;
+}
+
+.record h3 {
+  margin-top: 0;
+  /* color: #2e3a87; */
+}
+
+.empty {
+  text-align: center;
+  color: #777777;
+  padding: 15px;
+}
